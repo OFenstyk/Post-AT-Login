@@ -23,8 +23,7 @@ const loginTrue = async (page, username, password) => {
     // Wait for navigation or any element indicating successful login
     await page.waitForNavigation();
 
-    // You can add assertions here to verify if the login was successful
-    // For example, check if a specific element is present on the dashboard page
+    // Check if a logout Avatar is visible
     const element = await page.waitForSelector(data.successfulLoginAvatar, { state: 'visible' });
     // Assert that the element is visible
     expect(element).not.toBeNull();
