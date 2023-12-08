@@ -17,7 +17,8 @@ const testData = [
    loginButton: '#next',
    failedLoginMessage: '#kiam-login-failed',
    successfulLoginAvatar: '.headerbar__loginAvatar',
-   failedLoginEmptyUsernamePasswordMessage: '.error itemLevel'
+   failedLoginEmptyUsernamePasswordMessage: '.error itemLevel',
+   logoutButton: '.headerbar__login-submenuitem.logged-in.sub-menu__linkbtn'
  
   }
 ];

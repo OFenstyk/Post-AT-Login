@@ -1,10 +1,13 @@
-const { test } = require('@playwright/test');
-const { testData, loginFalse } = require('../test-data/login-data.spec');
-
-test.describe('Logout form post.at', () => {
-  testData.forEach((data) => {
-    test(`logout: ${data.emptyUsername}`, async ({ page }) => {
-      await loginFalse(page, data.emptyUsername, data.emptyPassword);
+  // @ts-check
+  const { test } = require('@playwright/test');
+  const { testData } = require('../test-data/login-data.spec');
+  const { logout } = require('../test-data/commands.spec');
+  
+  
+  test.describe('Login to post.at with valid credentials', () => {
+    testData.forEach((data) => {
+      test(`login with valid username: ${data.username}`, async ({ page }) => {
+        await logout(page, data.username, data.password);
+      });
     });
   });
-});

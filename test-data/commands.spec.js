@@ -75,4 +75,31 @@ const loginFalseEmpty = async (page, username, password) => {
   }
 };
 
-module.exports = { loginTrue, loginFalse, loginFalseEmpty };
+const logout = async (page, username, password) => {
+  for (const data of testData) {
+    // Navigate to the login page
+    await page.goto(data.home);
+
+    // Click on accept cookies
+    await page.click(data.acceptCoockiesButton);
+
+    // Click on login
+    await page.click(data.homepageLoginButton);
+
+    // Fill in the username and password fields
+    await page.fill(data.usernameField, username);
+    await page.fill(data.passwordField, password);
+
+    // Click the login button
+    await page.click(data.loginButton);
+
+    // Click on personal panel
+    await page.click(data.successfulLoginAvatar);
+
+    // Click on logout button
+    const logoutButton = await page.waitForSelector(data.logoutButton);
+    await logoutButton.click();
+  }
+};
+
+module.exports = { loginTrue, loginFalse, loginFalseEmpty, logout };
