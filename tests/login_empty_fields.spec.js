@@ -1,10 +1,11 @@
 const { test } = require('@playwright/test');
-const { testData, loginFalse } = require('../test-data/login-data.spec');
+const { testData } = require('../test-data/login-data.spec');
+const { loginFalseEmpty } = require('../test-data/commands.spec');
 
 test.describe('Login to post.at with empty fields', () => {
   testData.forEach((data) => {
     test(`login with Empty fields: ${data.emptyUsername}`, async ({ page }) => {
-      await loginFalse(page, data.emptyUsername, data.emptyPassword);
+      await loginFalseEmpty(page, data.emptyUsername, data.emptyPassword);
     });
   });
 });

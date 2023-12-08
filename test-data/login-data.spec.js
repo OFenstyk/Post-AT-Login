@@ -3,7 +3,8 @@ const { expect } = require('@playwright/test');
 
 
 const testData = [
-  { username: 'oleksandrfentsyk@gmail.com',
+  { 
+   username: 'oleksandrfentsyk@gmail.com',
    password: 'Zeppelino211',
    usernameFalse: 'oleksandrfensyk@gnail.com', 
    emptyUsername: '', 
@@ -15,8 +16,9 @@ const testData = [
    passwordField: '#password',
    loginButton: '#next',
    failedLoginMessage: '#kiam-login-failed',
-   successfulLoginAvatar: '.headerbar__loginAvatar'
-
+   successfulLoginAvatar: '.headerbar__loginAvatar',
+   failedLoginEmptyUsernamePasswordMessage: '.error itemLevel'
+ 
   }
 ];
 
