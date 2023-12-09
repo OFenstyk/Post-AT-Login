@@ -20,7 +20,7 @@ const login = async (page, username, password, expectedResult) => {
 
     const selectorToWaitFor = expectedResult
       ? data.successfulLoginAvatar
-      : data.failedLoginMessage;
+      : data.failedLoginMessage || data.failedLoginEmptyUsernamePasswordMessage;
 
     await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
 
@@ -31,28 +31,8 @@ const login = async (page, username, password, expectedResult) => {
   }
 };
 
-// Function to perform a successful login
-const loginTrue = async (page, username, password) => {
-  await login(page, username, password, true);
-};
-
-// Function to perform a failed login
-const loginFalse = async (page, username, password) => {
-  await login(page, username, password, false);
-};
-
-// Function to perform login with empty fields
-const loginFalseEmpty = async (page, username, password) => {
-  for (const data of testData) {
-    await navigateAndAcceptCookies(page, data);
-
-    await page.click(data.homepageLoginButton);
-    await page.click(data.loginButton);
-  }
-};
-
 // Function to perform logout
-const logout = async (page, username, password) => {
+const logout = async (page) => {
   for (const data of testData) {
     await page.click(data.successfulLoginAvatar);
     const logoutButton = await page.waitForSelector(data.logoutButton);
@@ -67,4 +47,4 @@ test.afterEach(async ({ browser }) => {
   }
 });
 
-module.exports = { loginTrue, loginFalse, loginFalseEmpty, logout };
+module.exports = { login, logout };
