@@ -5,34 +5,22 @@ const { testData } = require('../test-data/login-data.spec');
 
 test.describe('Login to post.at with different credentials', () => {
   testData.forEach(({ username, password, expectedResult }) => {
-    // Test case for login with empty fields
-    test(`login with Empty fields: ${username}`, async ({ page }) => {
-      await login(page, username, password, false);
+    // Test case for login with various credentials
+    test(`login with credentials: ${username}`, async ({ page }) => {
+      // Perform login with specified credentials
+      await login(page, username, password, expectedResult);
 
-      // Add assertions to verify unsuccessful login
-      const failedLoginElement = await page.waitForSelector('.error itemLevel', { state: 'visible' });
-      expect(failedLoginElement).not.toBeNull();
-    });
+      // Add assertions based on the expected result
+      if (!expectedResult) {
+        const failedLoginElement = await page.waitForSelector('.userlogin__modal-body', { state: 'visible' });
+        expect(failedLoginElement).not.toBeNull();
+      } else {
+        const loggedInElement = await page.waitForSelector('.headerbar__login logged-in', { state: 'visible' });
+        expect(loggedInElement).not.toBeNull();
 
-    // Test case for login with valid credentials
-    test(`login with valid username: ${username}`, async ({ page }) => {
-      await login(page, username, password, true);
-
-      // Add assertions to verify successful login
-      const loggedInElement = await page.waitForSelector('.headerbar__login logged-in', { state: 'visible' });
-      expect(loggedInElement).not.toBeNull();
-
-      // Logout after successful login
-      await logout(page);
-    });
-
-    // Test case for login with invalid credentials
-    test(`login with Invalid username: ${username}`, async ({ page }) => {
-      await login(page, username, password, null);
-
-      // Add assertions to verify unsuccessful login
-      const failedLoginElement = await page.waitForSelector('#kiam-login-failed', { state: 'visible' });
-      expect(failedLoginElement).not.toBeNull();
+        // Logout after successful login
+        await logout(page);
+      }
     });
   });
 });

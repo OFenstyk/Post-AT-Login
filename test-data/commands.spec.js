@@ -20,7 +20,7 @@ const login = async (page, username, password, expectedResult) => {
 
     const selectorToWaitFor = expectedResult
       ? data.successfulLoginAvatar
-      : data.failedLoginMessage || data.failedLoginEmptyUsernamePasswordMessage;
+      : data.failedLoginMessage;
 
     await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
 

@@ -16,9 +16,7 @@ const testData = [
     usernameField: '#signInName',
     passwordField: '#password',
     loginButton: '#next',
-    failedLoginMessage: '#kiam-login-failed',
     successfulLoginAvatar: '.headerbar__login logged-in',
-    failedLoginEmptyUsernamePasswordMessage: '.error itemLevel',
     logoutButton: '.headerbar__login-submenuitem.logged-in.sub-menu__linkbtn'
   },
   {
@@ -28,16 +26,13 @@ const testData = [
     expectedResult: false,
 
     // Common elements and URLs
-    home: 'http://www.post.at/',
-    acceptCoockiesButton: '#onetrust-accept-btn-handler',
-    homepageLoginButton: '.headerbar__btnText',
-    usernameField: '#signInName',
-    passwordField: '#password',
-    loginButton: '#next',
-    failedLoginMessage: '#kiam-login-failed',
-    successfulLoginAvatar: '.headerbar__loginAvatar',
-    failedLoginEmptyUsernamePasswordMessage: '.error_itemLevel',
-    logoutButton: '.headerbar__login-submenuitem.logged-in.sub-menu__linkbtn'
+     home: 'http://www.post.at/',
+     acceptCoockiesButton: '#onetrust-accept-btn-handler',
+     homepageLoginButton: '.headerbar__btnText',
+     usernameField: '#signInName',
+     passwordField: '#password',
+     loginButton: '#next',
+     failedLoginEmptyUsernamePasswordMessage: '.userlogin__modal-body'
   },
   {
     // Invalid credentials
@@ -52,11 +47,8 @@ const testData = [
     usernameField: '#signInName',
     passwordField: '#password',
     loginButton: '#next',
-    failedLoginMessage: '#kiam-login-failed',
-    successfulLoginAvatar: '.headerbar__loginAvatar',
-    failedLoginEmptyUsernamePasswordMessage: '.error_itemLevel',
-    logoutButton: '.headerbar__login-submenuitem.logged-in.sub-menu__linkbtn'
-  },
+    failedLoginMessage: '.userlogin__modal-body'
+  }
 ];
 
 module.exports = { testData };
