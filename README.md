@@ -46,12 +46,12 @@ npm install
 npm test
 ````
 
-##Tests
+## Tests
 
-Briefly describe the tests included in this repository. Include information on how to run them.
+This repo includes tests with positive and negative scenarios for the process of logging in to the post.at
 
-##Contributing
-Explain how others can contribute to your project. Include guidelines for reporting issues and submitting pull requests.
+## Contributing
+No contribution needed
 
-##License
+## License
 This project is licensed under the MIT License.
