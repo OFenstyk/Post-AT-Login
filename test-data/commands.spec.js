@@ -9,7 +9,7 @@ const navigateAndAcceptCookies = async (page, data) => {
 };
 
 // Function to perform login with username, password, and an indicator for success
-const login = async (page, username, password, shouldSucceed) => {
+const login = async (page, username, password, expectedResult) => {
   for (const data of testData) {
     await navigateAndAcceptCookies(page, data);
 
@@ -18,16 +18,13 @@ const login = async (page, username, password, shouldSucceed) => {
     await page.fill(data.passwordField, password);
     await page.click(data.loginButton);
 
-    // Determine the selector to wait for based on the success indicator
-    const selectorToWaitFor = shouldSucceed
+    const selectorToWaitFor = expectedResult
       ? data.successfulLoginAvatar
       : data.failedLoginMessage;
 
-    // Wait for the specified selector to be visible
     await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
 
-    if (shouldSucceed) {
-      // If successful, assert that the login avatar is not null
+    if (expectedResult) {
       const element = await page.$(data.successfulLoginAvatar);
       expect(element).not.toBeNull();
     }
@@ -58,7 +55,6 @@ const loginFalseEmpty = async (page, username, password) => {
 const logout = async (page, username, password) => {
   for (const data of testData) {
     await page.click(data.successfulLoginAvatar);
-
     const logoutButton = await page.waitForSelector(data.logoutButton);
     await logoutButton.click();
   }

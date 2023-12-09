@@ -7,6 +7,7 @@ const testData = [
     // Valid credentials
     username: 'oleksandrfentsyk@gmail.com',
     password: 'Zeppelino211',
+    expectedResult: Boolean, // Indicate the expected result type (Boolean in this case)
 
     // Invalid credentials
     usernameFalse: 'oleksandrfensyk@gnail.com', 
