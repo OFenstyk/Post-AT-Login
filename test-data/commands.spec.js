@@ -1,8 +1,6 @@
 // @ts-check
 require('dotenv').config();
 
-require('dotenv').config();
-
 const { test, expect } = require('@playwright/test');
 const { testData } = require('./login-data.spec');
 
