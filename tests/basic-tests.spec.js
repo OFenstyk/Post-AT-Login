@@ -15,7 +15,7 @@ test.describe('Login to post.at with different credentials', () => {
         const failedLoginElement = await page.waitForSelector('.userlogin__modal-body', { state: 'visible' });
         expect(failedLoginElement).not.toBeNull();
       } else {
-        const loggedInElement = await page.waitForSelector('.headerbar__login logged-in', { state: 'visible' });
+        const loggedInElement = await page.waitForSelector('.headerbar__login.logged-in', { state: 'visible' });
         expect(loggedInElement).not.toBeNull();
 
         // Logout after successful login

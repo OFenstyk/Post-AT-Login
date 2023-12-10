@@ -10,34 +10,37 @@ const navigateAndAcceptCookies = async (page, data) => {
 
 // Function to perform login with username, password, and an indicator for success
 const login = async (page, username, password, expectedResult) => {
-  for (const data of testData) {
-    await navigateAndAcceptCookies(page, data);
+  // Call navigateAndAcceptCookies outside the loop
+  const firstTestData = testData[0]; // Assuming you have at least one set of test data
+  await navigateAndAcceptCookies(page, firstTestData);
 
-    await page.click(data.homepageLoginButton);
-    await page.fill(data.usernameField, username);
-    await page.fill(data.passwordField, password);
-    await page.click(data.loginButton);
+ 
+      await page.click(firstTestData.homepageLoginButton);
+      await page.fill(firstTestData.usernameField, username);
+      await page.fill(firstTestData.passwordField, password);
+      await page.click(firstTestData.loginButton);
 
-    const selectorToWaitFor = expectedResult
-      ? data.successfulLoginAvatar
-      : data.failedLoginMessage;
+      const selectorToWaitFor = expectedResult
+          ? firstTestData.successfulLoginAvatar
+          : firstTestData.failedLoginMessage || firstTestData.failedLoginEmptyUsernamePasswordMessage;
 
-    await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
+      await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
 
-    if (expectedResult) {
-      const element = await page.$(data.successfulLoginAvatar);
-      expect(element).not.toBeNull();
-    }
-  }
+      if (expectedResult) {
+          const element = await page.$(firstTestData.successfulLoginAvatar);
+          expect(element).not.toBeNull();
+      }
+  
 };
+
 
 // Function to perform logout
 const logout = async (page) => {
-  for (const data of testData) {
-    await page.click(data.successfulLoginAvatar);
-    const logoutButton = await page.waitForSelector(data.logoutButton);
+  const firstTestData = testData[0]; // Assuming you have at least one set of test data
+    await page.click(firstTestData.successfulLoginAvatar);
+    const logoutButton = await page.waitForSelector(firstTestData.logoutButton);
     await logoutButton.click();
-  }
+  
 };
 
 // Close the browser window after each test

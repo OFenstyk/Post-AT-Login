@@ -1,3 +1,4 @@
+
 // @ts-check
 const { expect } = require('@playwright/test');
 
@@ -16,7 +17,7 @@ const testData = [
     usernameField: '#signInName',
     passwordField: '#password',
     loginButton: '#next',
-    successfulLoginAvatar: '.headerbar__login logged-in',
+    successfulLoginAvatar: '.headerbar__login.logged-in',
     logoutButton: '.headerbar__login-submenuitem.logged-in.sub-menu__linkbtn'
   },
   {
@@ -26,13 +27,13 @@ const testData = [
     expectedResult: false,
 
     // Common elements and URLs
-     home: 'http://www.post.at/',
-     acceptCoockiesButton: '#onetrust-accept-btn-handler',
-     homepageLoginButton: '.headerbar__btnText',
-     usernameField: '#signInName',
-     passwordField: '#password',
-     loginButton: '#next',
-     failedLoginEmptyUsernamePasswordMessage: '.userlogin__modal-body'
+    home: 'http://www.post.at/',
+    acceptCoockiesButton: '#onetrust-accept-btn-handler',
+    homepageLoginButton: '.headerbar__btnText',
+    usernameField: '#signInName',
+    passwordField: '#password',
+    loginButton: '#next',
+    failedLoginEmptyUsernamePasswordMessage: '.highlightError'  
   },
   {
     // Invalid credentials
@@ -47,8 +48,8 @@ const testData = [
     usernameField: '#signInName',
     passwordField: '#password',
     loginButton: '#next',
-    failedLoginMessage: '.userlogin__modal-body'
-  }
+    failedLoginMessage: '#kiam-login-failed'
+  },
 ];
 
 module.exports = { testData };
