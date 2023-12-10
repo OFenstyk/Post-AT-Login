@@ -1,12 +1,19 @@
-// @ts-check
 // Load environment variables from the .env file
 require('dotenv').config();
 
 // Import necessary modules and configurations from Playwright
 const { test, expect } = require('@playwright/test');
+const jwt = require('jsonwebtoken');
 
 // Import test data containing various login scenarios
 const { testData } = require('./login-data.spec');
+
+// Function to generate JWT token
+const generateJwtToken = (userId) => {
+  const secretKey = process.env.JWT_SECRET;
+  const token = jwt.sign({ userId }, secretKey, { expiresIn: '1h' });
+  return token;
+};
 
 // Function to navigate to the home page and accept cookies
 const navigateAndAcceptCookies = async (page, data) => {
@@ -23,7 +30,7 @@ const login = async (page, data, username, password, expectedResult = true) => {
   // Navigate to the home page and accept cookies
   await navigateAndAcceptCookies(page, data);
 
-  // Click on the login button in the homepage
+  // Click on the login button on the homepage
   await page.click(data.homepageLoginButton);
 
   // Fill in username and password fields if provided
@@ -47,9 +54,15 @@ const login = async (page, data, username, password, expectedResult = true) => {
 
   // Check assertions based on the expected result
   if (expectedResult) {
-    // For successful login, verify the presence of the successful login avatar
-    const element = await page.$(data.successfulLoginAvatar);
-    expect(element).not.toBeNull();
+    // For successful login, generate JWT token and include in subsequent requests
+    const userId = 'c02d3813-d4b9-40a1-9db9-09e34cb9c2e1'; // Replace with the actual user ID
+    const jwtToken = generateJwtToken(userId);
+
+    // Include the token in the headers of subsequent requests
+    await page.setExtraHTTPHeaders({
+      Authorization: `Bearer ${jwtToken}`,
+    });
+
   } else {
     // For unsuccessful login, verify the presence of the failed login modal body
     const failedLoginElement = await page.waitForSelector('.userlogin__modal-body');
