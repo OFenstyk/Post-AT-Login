@@ -1,6 +1,7 @@
 // @ts-check
 require('dotenv').config();
 
+require('dotenv').config();
 
 const { test, expect } = require('@playwright/test');
 const { testData } = require('./login-data.spec');
@@ -8,59 +9,43 @@ const { testData } = require('./login-data.spec');
 // Function to navigate to the home page and accept cookies
 const navigateAndAcceptCookies = async (page, data) => {
   await page.goto(data.home);
+  await page.waitForSelector(data.acceptCoockiesButton);
   await page.click(data.acceptCoockiesButton);
 };
 
 // Function to perform login with username, password, and an indicator for success
-const login = async (page, username, password, expectedResult = true) => {
-  for (const data of testData) {
-    await navigateAndAcceptCookies(page, data);
+const login = async (page, data, username, password, expectedResult = true) => {
+  await navigateAndAcceptCookies(page, data);
 
-    await page.click(data.homepageLoginButton);
+  await page.click(data.homepageLoginButton);
+  if (username) {
     await page.fill(data.usernameField, username);
-    await page.fill(data.passwordField, password);
-    await page.click(data.loginButton);
-
-    const selectorToWaitFor = expectedResult
-      ? data.successfulLoginAvatar
-      : data.failedLoginMessage;
-
-    await page.waitForSelector(selectorToWaitFor, { state: 'visible' });
-
-    if (expectedResult) {
-      const element = await page.$(data.successfulLoginAvatar);
-      expect(element).not.toBeNull();
-    }
   }
-};
+  if (password) {
+    await page.fill(data.passwordField, password);
+  }
+  await page.click(data.loginButton);
 
-// Function to perform a successful login
-const loginTrue = async (page, username, password) => {
-  await login(page, username, password, true);
-};
+  const selectorToWaitFor = expectedResult
+    ? data.successfulLoginAvatar
+    : data.failedLoginMessage;
 
-// Function to perform a failed login
-const loginFalse = async (page, username, password) => {
-  await login(page, username, password, false);
-};
+  await page.waitForSelector(selectorToWaitFor);
 
-// Function to perform login with empty fields
-const loginFalseEmpty = async (page, username, password) => {
-  for (const data of testData) {
-    await navigateAndAcceptCookies(page, data);
-
-    await page.click(data.homepageLoginButton);
-    await page.click(data.loginButton);
+  if (expectedResult) {
+    const element = await page.$(data.successfulLoginAvatar);
+    expect(element).not.toBeNull();
+  } else {
+    const failedLoginElement = await page.waitForSelector('.userlogin__modal-body');
+    expect(failedLoginElement).not.toBeNull();
   }
 };
 
 // Function to perform logout
-const logout = async (page, username, password) => {
-  for (const data of testData) {
-    await page.click(data.successfulLoginAvatar);
-    const logoutButton = await page.waitForSelector(data.logoutButton);
-    await logoutButton.click();
-  }
+const logout = async (page, data) => {
+  await page.click(data.successfulLoginAvatar);
+  const logoutButton = await page.waitForSelector(data.logoutButton);
+  await logoutButton.click();
 };
 
 // Close the browser window after each test
@@ -70,4 +55,4 @@ test.afterEach(async ({ browser }) => {
   }
 });
 
-module.exports = { loginTrue, loginFalse, loginFalseEmpty, logout };
+module.exports = { login, logout };
