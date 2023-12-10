@@ -1,7 +1,11 @@
 // @ts-check
+// Load environment variables
 require('dotenv').config();
+
+// Import necessary modules from Playwright for testing
 const { expect } = require('@playwright/test');
 
+// Extract credentials and test data from environment variables
 const username = process.env.USERNAME_VALID;
 const password = process.env.PASSWORD_VALID;
 const usernameFalse = process.env.USERNAME_FALSE;
@@ -28,7 +32,7 @@ const testData = [
     // Target URL
     home,
 
-    // Common static elements
+    // Common static elements on the web page
     acceptCoockiesButton: '#onetrust-accept-btn-handler',
     homepageLoginButton: '.headerbar__btnText',
     usernameField: '#signInName',
@@ -41,4 +45,5 @@ const testData = [
   },
 ];
 
+// Export the test data for use in test scripts
 module.exports = { testData };
