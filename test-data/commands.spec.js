@@ -13,8 +13,6 @@ const login = async (page, username, password, expectedResult) => {
   // Call navigateAndAcceptCookies outside the loop
   const firstTestData = testData[0]; // Assuming you have at least one set of test data
   await navigateAndAcceptCookies(page, firstTestData);
-
- 
       await page.click(firstTestData.homepageLoginButton);
       await page.fill(firstTestData.usernameField, username);
       await page.fill(firstTestData.passwordField, password);
