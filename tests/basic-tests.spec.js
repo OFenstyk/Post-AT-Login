@@ -1,74 +1,43 @@
-// Import necessary modules and configurations
+// @ts-check
 require('dotenv').config();
 const { test, expect } = require('@playwright/test');
-const { testData } = require('./login-data.spec');
+const { login, logout } = require('../test-data/commands.spec');
 
-// Function to navigate to the home page and accept cookies
-const navigateAndAcceptCookies = async (page, data) => {
-  // Navigate to the home page
-  await page.goto(data.home);
+test.describe('Login to post.at with different credentials', () => {
+  const { testData } = require('../test-data/login-data.spec');
 
-  // Wait for and accept cookies
-  await page.waitForSelector(data.acceptCoockiesButton);
-  await page.click(data.acceptCoockiesButton);
-};
+  testData.forEach(({ username, password, usernameFalse, passwordFalse, usernameEmpty, passwordEmpty }) => {
+    // Test case for login with empty fields
+    test(`login with Empty fields: ${usernameEmpty}`, async ({ page }) => {
+      // Perform login with empty fields
+      await login(page, testData[0], usernameEmpty, passwordEmpty, false);
 
-// Function to perform login with username, password, and an indicator for success
-const login = async (page, data, username, password, expectedResult = true) => {
-  // Navigate to the home page and accept cookies
-  await navigateAndAcceptCookies(page, data);
+      // Add assertions to verify unsuccessful login
+      const failedLoginElement = await page.waitForSelector('.userlogin__modal-body', { state: 'visible' });
+      expect(failedLoginElement).not.toBeNull();
+    });
 
-  // Click on the login button in the homepage
-  await page.click(data.homepageLoginButton);
+    // Test case for login with valid credentials
+    test(`login with valid username: ${username}`, async ({ page }) => {
+      // Log in with valid credentials
+      await login(page, testData[0], username, password);
 
-  // Fill in username and password fields if provided
-  if (username) {
-    await page.fill(data.usernameField, username);
-  }
-  if (password) {
-    await page.fill(data.passwordField, password);
-  }
+      // Add assertions to verify successful login
+      const loggedInElement = await page.waitForSelector('.headerbar__loginAvatar', { state: 'visible' });
+      expect(loggedInElement).not.toBeNull();
 
-  // Click the login button
-  await page.click(data.loginButton);
+      // Logout after successful login
+      await logout(page, testData[0]);
+    });
 
-  // Determine which selector to wait for based on the expected result
-  const selectorToWaitFor = expectedResult
-    ? data.successfulLoginAvatar
-    : data.failedLoginMessage;
+    // Test case for login with invalid credentials
+    test(`login with Invalid username: ${usernameFalse}`, async ({ page }) => {
+      // Attempt login with invalid credentials
+      await login(page, testData[0], usernameFalse, passwordFalse, false);
 
-  // Wait for the specified selector to be visible
-  await page.waitForSelector(selectorToWaitFor);
-
-  // Check assertions based on the expected result
-  if (expectedResult) {
-    // For successful login, verify the presence of the successful login avatar
-    const element = await page.$(data.successfulLoginAvatar);
-    expect(element).not.toBeNull();
-  } else {
-    // For unsuccessful login, verify the presence of the failed login modal body
-    const failedLoginElement = await page.waitForSelector('.userlogin__modal-body');
-    expect(failedLoginElement).not.toBeNull();
-  }
-};
-
-// Function to perform logout
-const logout = async (page, data) => {
-  // Click on the successful login avatar
-  await page.click(data.successfulLoginAvatar);
-
-  // Wait for and click on the logout button
-  const logoutButton = await page.waitForSelector(data.logoutButton);
-  await logoutButton.click();
-};
-
-// Close the browser window after each test
-test.afterEach(async ({ browser }) => {
-  // Check if there are open contexts and close the first one
-  if (browser.contexts().length > 0) {
-    await browser.contexts()[0].close();
-  }
+      // Add assertions to verify unsuccessful login
+      const failedLoginElement = await page.waitForSelector('.userlogin__modal-body');
+      expect(failedLoginElement).not.toBeNull();
+    });
+  });
 });
-
-// Export the login and logout functions for reuse in tests
-module.exports = { login, logout };
