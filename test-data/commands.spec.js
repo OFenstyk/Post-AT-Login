@@ -1,4 +1,7 @@
 // @ts-check
+require('dotenv').config();
+
+
 const { test, expect } = require('@playwright/test');
 const { testData } = require('./login-data.spec');
 
@@ -9,7 +12,7 @@ const navigateAndAcceptCookies = async (page, data) => {
 };
 
 // Function to perform login with username, password, and an indicator for success
-const login = async (page, username, password, expectedResult) => {
+const login = async (page, username, password, expectedResult = true) => {
   for (const data of testData) {
     await navigateAndAcceptCookies(page, data);
 

@@ -1,14 +1,16 @@
 // @ts-check
+require('dotenv').config();
+
 const { test, expect } = require('@playwright/test');
 const { testData } = require('../test-data/login-data.spec');
 const { loginTrue, loginFalse, loginFalseEmpty, logout } = require('../test-data/commands.spec');
 
 test.describe('Login to post.at with different credentials', () => {
-  testData.forEach(({ username, password, usernameFalse, emptyUsername, emptyPassword }) => {
+  testData.forEach(({ username, password, usernameFalse, passwordFalse, usernameEmpty, passwordEmpty }) => {
     // Test case for login with empty fields
-    test(`login with Empty fields: ${emptyUsername}`, async ({ page }) => {
+    test(`login with Empty fields: ${usernameEmpty}`, async ({ page }) => {
       // Perform login with empty fields
-      await loginFalseEmpty(page, emptyUsername, emptyPassword);
+      await loginFalseEmpty(page, usernameEmpty, passwordEmpty);
 
       // Add assertions to verify unsuccessful login
       const failedLoginElement = await page.waitForSelector('.highlightError', { state: 'visible' });
@@ -31,7 +33,7 @@ test.describe('Login to post.at with different credentials', () => {
     // Test case for login with invalid credentials
     test(`login with Invalid username: ${usernameFalse}`, async ({ page }) => {
       // Attempt login with invalid credentials
-      await loginFalse(page, usernameFalse, password);
+      await loginFalse(page, usernameFalse, passwordFalse);
 
       // Add assertions to verify unsuccessful login
       const failedLoginElement = await page.waitForSelector('#kiam-login-failed', { state: 'visible' });
