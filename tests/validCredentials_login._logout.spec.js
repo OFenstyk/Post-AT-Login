@@ -11,15 +11,6 @@ const { testData } = require('../test-data/login-data.spec');
 test.describe('Login to post.at with different credentials', () => {
   // Iterate through test data
   testData.forEach((data) => {
-    // Test case for login with empty fields
-    test(`login with Empty fields: ${data.usernameEmpty}`, async ({ page }) => {
-      // Perform login with empty fields
-      await login(page, data, data.usernameEmpty, data.passwordEmpty, false);
-
-      // Add assertions to verify unsuccessful login
-      const failedLoginElement = await page.waitForSelector(data.failedLoginMessage, { state: 'visible' });
-      expect(failedLoginElement).not.toBeNull();
-    });
 
     // Test case for login with valid credentials
     test(`login with valid username: ${data.username}`, async ({ page }) => {
@@ -32,16 +23,6 @@ test.describe('Login to post.at with different credentials', () => {
 
       // Logout after successful login
       await logout(page, data);
-    });
-
-    // Test case for login with invalid credentials
-    test(`login with Invalid username: ${data.usernameFalse}`, async ({ page }) => {
-      // Attempt login with invalid credentials
-      await login(page, data, data.usernameFalse, data.passwordFalse, false);
-
-      // Add assertions to verify unsuccessful login
-      const failedLoginElement = await page.waitForSelector(data.failedLoginEmptyUsernamePasswordMessage);
-      expect(failedLoginElement).not.toBeNull();
     });
   });
 });
